@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Quotes</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"/>
+</head>
+<body>
+<main class="container">
+    <nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
+        {% if user.is_authenticated %}
+        <ul>
+            <li><a href="{% url 'quotes:quote' %}" role="button">Add Quote</a></li>
+            <li><a href="{% url 'quotes:author' %}" role="button">Add Author</a></li>
+            <li><a href="{% url 'quotes:tag' %}" role="button">Add Tag</a></li>
+        </ul>
+        <ul>
+            <li>Welcome <b>{{ user.username }}!</b></li>
+            <li><a href="{% url 'users:logout' %}" role="button">Logout</a></li>
+        </ul>
+        {% else %}
+        <ul>
+            <li><a href="{% url 'users:signup' %}" role="button">Sign Up</a></li>
+            <li><a href="{% url 'users:login' %}" role="button">Login</a></li>
+        </ul>
+        {% endif %}
+    </nav>
+
+    <h1>Quotes</h1>
+
+    <div style="display: flex;">
+        <section style="flex: 3;">
+            {% if quotes %}
+                <ul>
+                    {% for quote in quotes %}
+                    <li>
+                        <a href="{% url 'quotes:detail_quote' quote.id %}" role="button" class="outline">{{ quote.quote }}</a>
+                        <br>
+                        by <b>{{ quote.author.fullname }}</b> <a href="{% url 'quotes:detail_author' quote.author.id %}" role="button">about</a>
+                        {% if quote.tags.all %}
+                            <br>
+                            <span>Tags:
+                                {% for tag in quote.tags.all %}
+                                    <a href="{% url 'quotes:quotes_by_tag' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if quotes.has_previous %}
+                            <a href="?page=1">&laquo; First</a>
+                            <a href="?page={{ quotes.previous_page_number }}">Previous</a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ quotes.number }} of {{ quotes.paginator.num_pages }}.
+                        </span>
+
+                        {% if quotes.has_next %}
+                            <a href="?page={{ quotes.next_page_number }}">Next</a>
+                            <a href="?page={{ quotes.paginator.num_pages }}">Last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+
+            {% else %}
+                <p>No quotes available.</p>
+            {% endif %}
+        </section>
+
+        <aside style="flex: 1; margin-left: 20px;">
+            <h2>Top Ten Tags</h2>
+            <ul>
+                {% for tag in top_tags %}
+                    <li>
+                        <a href="{% url 'quotes:quotes_by_tag' tag.name %}">{{ tag.name }}</a> ({{ tag.num_quotes }})
+                    </li>
+                {% endfor %}
+            </ul>
+        </aside>
+    </div>
+</main>
+</body>
+</html>

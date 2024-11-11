@@ -1,0 +1,44 @@
+{% extends "quotes/base.html" %}
+
+{% block content %}
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<form method="POST" action="{% url 'quotes:author' %}">
+    {% csrf_token %}
+    <div style="padding: 10px">
+        <label>Enter fullname:
+            {{ form.fullname }}
+        </label>
+        <span>{{ form.errors.fullname }}</span>
+    </div>
+    <div style="padding: 10px">
+        <label>Enter born date:
+            {{ form.born_date }}
+        </label>
+        <span>{{ form.errors.born_date }}</span>
+    </div>
+    <div style="padding: 10px">
+        <label>Enter born location:
+            {{ form.born_location }}
+        </label>
+        <span>{{ form.errors.born_location }}</span>
+    </div>
+    <div style="padding: 10px">
+        <label>Description:
+            {{ form.description }}
+        </label>
+        <span>{{ form.errors.description }}</span>
+    </div>
+    <div class="grid">
+        <button type="submit">Add author</button>
+        <button type="reset" class="secondary">Reset</button>
+    </div>
+</form>
+{% endblock %}

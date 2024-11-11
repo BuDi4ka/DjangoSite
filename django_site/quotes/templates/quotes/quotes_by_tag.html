@@ -1,0 +1,19 @@
+{% extends "quotes/base.html" %}
+
+{% block content %}
+<main class="container">
+    <h1>Quotes tagged with "{{ tag.name }}"</h1>
+    <ul>
+        {% for quote in quotes %}
+            <li>
+                <a href="{% url 'quotes:detail_quote' quote.id %}" role="button" class="outline">{{ quote.quote }}</a>
+                <br>
+                by <b>{{ quote.author.fullname }}</b> <a href="{% url 'quotes:detail_author' quote.author.id %}" role="button">about</a>
+            </li>
+        {% empty %}
+            <li>No quotes found for this tag.</li>
+        {% endfor %}
+    </ul>
+    {#<a href="{% url 'quotes:quote_list' %}" role="button">Back to all quotes</a>#}
+</main>
+{% endblock %}
