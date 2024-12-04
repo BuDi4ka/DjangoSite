@@ -7,6 +7,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+django = "^5.1.2"
+pymongo = "^4.10.1"
+sqlalchemy = "^2.0.36"
+psycopg2-binary = "^2.9.10"
+certifi = "^2024.8.30"
+django-environ = "^0.11.2"
 
 
 [build-system]
